@@ -1,0 +1,37 @@
+{
+    "name": "flashbackzoo/silverstripe-backbone",
+    "description": "Integrate Backbone.js applications with SilverStripe",
+    "homepage": "https://github.com/flashbackzoo/silverstripe-backbone",
+    "keywords": [
+        "Backbone",
+        "SilverStripe"
+    ],
+    "config": {
+        "process-timeout": 1000
+    },
+    "licence": "ISC",
+    "authors": [
+        {
+            "name": "David Craig",
+            "email": "david@silverstripe.com"
+        },
+        {
+            "name": "Ben Manu",
+            "email": "ben@silverstripe.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/flashbackzoo/silverstripe-backbone/issues"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "npm install"
+        ]
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "silverstripe/cms": "3.1.x-dev",
+        "silverstripe/framework": "3.1.x-dev"
+    },
+    "minimum-stability": "dev"
+}
