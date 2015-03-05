@@ -10,14 +10,24 @@ class RESTController extends Controller {
         'RESTService' => '%$RESTService'
     );
 
-	private static $allowed_actions = array(
-	);
-
-	private static $allowed_routes = array(
-    );
+    /**
+     * Defines the routes with app responses.
+     * @var array
+     */
+	private static $allowed_routes = array();
 
     public function init() {
     	parent::init();
+    }
+
+    public function handleAction($request, $action) {
+        // return the template on root.
+        if($action == 'index') {
+            return parent::handleAction($request, $action);
+        }
+
+        // return the service response on action.
+        return $this->RESTService->$action();
     }
 
 	/**

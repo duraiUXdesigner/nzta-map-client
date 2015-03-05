@@ -1,0 +1,9 @@
+---
+Name: silverstripe-backbone
+After:
+  - 'framework/*'
+  - 'cms/*'
+---
+RESTController:
+  allowed_routes:
+    - regions

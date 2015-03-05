@@ -10,4 +10,10 @@ class RESTService {
         'RESTGateway' => '%$RESTGateway'
     );
 
+    public function regions() {
+        $response = $this->RESTGateway->cachedCall('getRegions');
+
+        return $response;
+    }
+
 }
