@@ -6,14 +6,24 @@ class RESTService {
      */
     public $RESTGateway;
 
+    /**
+     * @var ConversionService
+     */
+    public $ConversionService;
+
     private static $dependencies = array(
-        'RESTGateway' => '%$RESTGateway'
+        'RESTGateway' => '%$RESTGateway',
+        'ConversionService' => '%$ConversionService'
     );
 
     public function regions() {
         $response = $this->RESTGateway->cachedCall('getRegions');
 
-        return $response;
+        if(!$response) {
+            return null;
+        }
+
+        return $this->ConversionService->jsonToGeoJson($response, 'region', 'region');
     }
 
 }
