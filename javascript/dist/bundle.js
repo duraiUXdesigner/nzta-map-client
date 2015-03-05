@@ -63,8 +63,25 @@
 }));
 
 },{"./components/map/mapView":4,"./components/menu/menuView":7,"./components/popup/popupView":8,"./components/user-controls/userControlsView":9,"./constants":10,"./shim":11,"nzta-map-components":22}],2:[function(require,module,exports){
+/**
+ * @module CamerasCollection
+ * @requires module:nzta-map-components
+ */
 
-},{}],3:[function(require,module,exports){
+/*jshint node: true */
+
+'use strict';
+
+var NZTAComponents = require('nzta-map-components');
+
+var CamerasCollection = NZTAComponents.GeoJsonCollection.extend({
+    model: NZTAComponents.GeoJsonModel,
+    url: 'rest/cameras'
+});
+
+module.exports = CamerasCollection;
+
+},{"nzta-map-components":22}],3:[function(require,module,exports){
 /**
  * @file The model for MapView
  * @module MapModel
@@ -281,16 +298,50 @@ var MapView = NZTAComponents.MapView.extend({
 module.exports = MapView;
 
 },{"../../constants":10,"./mapModel":3,"backbone":18,"jquery":20,"leaflet":21,"nzta-map-components":22,"underscore":32}],5:[function(require,module,exports){
-arguments[4][2][0].apply(exports,arguments)
-},{"dup":2}],6:[function(require,module,exports){
-arguments[4][2][0].apply(exports,arguments)
-},{"dup":2}],7:[function(require,module,exports){
-arguments[4][2][0].apply(exports,arguments)
-},{"dup":2}],8:[function(require,module,exports){
-arguments[4][2][0].apply(exports,arguments)
-},{"dup":2}],9:[function(require,module,exports){
-arguments[4][2][0].apply(exports,arguments)
-},{"dup":2}],10:[function(require,module,exports){
+/**
+ * @module RegionsCollection
+ * @requires module:nzta-map-components
+ */
+
+/*jshint node: true */
+
+'use strict';
+
+var NZTAComponents = require('nzta-map-components');
+
+var RegionsCollection = NZTAComponents.GeoJsonCollection.extend({
+    model: NZTAComponents.GeoJsonModel,
+    url: 'rest/regions'
+});
+
+module.exports = RegionsCollection;
+
+},{"nzta-map-components":22}],6:[function(require,module,exports){
+/**
+ * @module RoadEventsCollection
+ * @requires module:nzta-map-components
+ */
+
+/*jshint node: true */
+
+'use strict';
+
+var NZTAComponents = require('nzta-map-components');
+
+var RoadEventsCollection = NZTAComponents.GeoJsonCollection.extend({
+    model: NZTAComponents.GeoJsonModel,
+    url: 'rest/events'
+});
+
+module.exports = RoadEventsCollection;
+
+},{"nzta-map-components":22}],7:[function(require,module,exports){
+
+},{}],8:[function(require,module,exports){
+arguments[4][7][0].apply(exports,arguments)
+},{"dup":7}],9:[function(require,module,exports){
+arguments[4][7][0].apply(exports,arguments)
+},{"dup":7}],10:[function(require,module,exports){
 /**
  * @file onstants for the Traffic Map application.
  * @module constants
@@ -299,6 +350,8 @@ arguments[4][2][0].apply(exports,arguments)
 /*jshint node: true */
 
 var constants = {};
+
+constants.FETCH_INTERVAL = 10000;
 
 constants.MAP_DEFAULT_BOUNDS = [[-29.209970, 175.987198],[-52.618591, 165.883804]];
 
