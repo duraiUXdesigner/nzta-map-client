@@ -26,4 +26,25 @@ class RESTService {
         return $this->ConversionService->jsonToGeoJson($response, 'region', 'region');
     }
 
+    public function cameras() {
+        $response = $this->RESTGateway->cachedCall('getCameras');
+
+        if(!$response) {
+            return null;
+        }
+
+        return $this->ConversionService->jsonToGeoJson($response, 'camera', 'camera');
+    }
+
+    public function events() {
+        $response = $this->RESTGateway->cachedCall('getEvents');
+
+        if(!$response) {
+            return null;
+        }
+
+        return $this->ConversionService->jsonToGeoJson($response, 'roadevent', 'event');
+    }
+
+
 }

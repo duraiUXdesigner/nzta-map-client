@@ -10,4 +10,14 @@ class RESTGateway extends RESTBaseGateway {
         return $this->call($path);
     }
 
+    public function getCameras() {
+        $path = 'silverstripe-backbone/tests/fixtures/cameras.json';
+        return $this->call($path);
+    }
+
+    public function getEvents() {
+        $path = 'silverstripe-backbone/tests/fixtures/events.json';
+        return $this->call($path);
+    }
+
 }

@@ -7,3 +7,5 @@ After:
 RESTController:
   allowed_routes:
     - regions
+    - cameras
+    - events

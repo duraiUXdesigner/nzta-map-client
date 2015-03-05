@@ -17,14 +17,14 @@ class ConversionService {
         foreach($json->$parent as $child) {
 
         	// if no geometry set than skip the feature.
-        	if(!isset($child->geometry)) {
+        	if(!isset($child->geometry) && (!isset($child->latitude) && !isset($child->longitude))) {
         		continue;
         	}
 
         	// grab all the element properties.
             $properties = array();
             foreach($child as $name => $value) {
-            	if($name == 'geometry') {
+            	if($name == 'geometry' || $name == 'latitude' || $name == 'longitude') {
             		continue;
             	}
 
@@ -34,12 +34,15 @@ class ConversionService {
             // add the feature type to the properties.
             $properties['featureType'] = $feature;
 
+            $type = (isset($child->geometry) ? $this->convertGeometryCoordinates((String)$child->geometry) : 'Point');
+            $coords = (isset($child->geometry) ? (String)$child->geometry : array((Float)$child->longitude, (Float)$child->latitude));
+
             // add the geojson feature.
             $geojson['features'][] = array(
                 'type' => 'Feature',
                 'geometry' => array(
-                    'type' => $this->getGeometryType((String)$child->geometry),
-                    'coordinates' => $this->convertGeometryCoordinates((String)$child->geometry)
+                    'type' => $type,
+                    'coordinates' => $coords
                 ),
                 'properties' => $properties
             );
