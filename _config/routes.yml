@@ -1,0 +1,7 @@
+---
+Name: silverstripe-backbone
+After: framework/routes#coreroutes
+---
+Director:
+  rules:
+    'rest//$Action': 'RESTController'
