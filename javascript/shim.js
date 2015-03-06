@@ -12,6 +12,10 @@ if (Backbone === void 0) {
     Backbone = window.Backbone = require('backbone');
 }
 
+if (Backbone.Associations === void 0) {
+    Backbone = require('backbone-associations');
+}
+
 if (_ === void 0) {
     _ = window._ = require('underscore');
 }
