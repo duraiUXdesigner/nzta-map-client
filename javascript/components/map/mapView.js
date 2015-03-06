@@ -101,7 +101,13 @@ var MapView = NZTAComponents.MapView.extend({
             }
 
             // Add a layer to display the data on.
-            this.geoJsonLayers[key] = Leaflet.geoJson().addTo(this.map);
+            this.geoJsonLayers[key] = Leaflet.geoJson(null, {
+                onEachFeature: function (feature, layer) {
+                    layer.on('click', function () {
+                        NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id);
+                    });
+                }
+            }).addTo(this.map);
 
             // Add each geoJson feature to the new layer.
             _.each(geoJsonCollection.models, function (geoJsonModel) {
