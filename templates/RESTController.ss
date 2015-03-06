@@ -9,5 +9,6 @@
     </head>
     <body>
         <div id="map" data-root="rest"></div>
+        <div id="popup-region"></div>
     </body>
 </html>
