@@ -47,10 +47,8 @@ var MapView = NZTAComponents.MapView.extend({
         // Set a default icon image path.
         Leaflet.Icon.Default.imagePath = '/silverstripe-backbone/images';
 
-        Leaflet.tileLayer('http://{s}.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}.png', {
-            url: "http://{s}.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}.png",
-            subdomains: ["server", "services"],
-            attribution: "ESRI, OpenStreetMap",
+        Leaflet.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 18,
             zIndex: 10
         }).addTo(this.map);
