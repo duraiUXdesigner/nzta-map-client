@@ -1,0 +1,12 @@
+$medium-display = '(min-width: 992px)'
+$large-display = '(min-width: 1200px)'
+
+$hideOn(display-width)
+    display inherit
+    @media display-width
+        display none !important
+
+$showOn(display-width)
+    display none
+    @media display-width
+        display inherit !important

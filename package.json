@@ -4,7 +4,9 @@
   "description": "Integrate Backbone.js applications with SilverStripe",
   "main": "./code/js/index.js",
   "scripts": {
-    "build": "browserify javascript/app > javascript/dist/bundle.js",
+    "build:css": "stylus styl/main.styl --compress --out css/main.css",
+    "build:js": "browserify javascript/app > javascript/dist/bundle.js",
+    "build": "npm run build:css && npm run build:js",
     "test": "mocha --require tests/mocha/bootstrap.js --recursive tests/mocha/specs/**/*.spec.js --reporter spec"
   },
   "repository": {
@@ -48,6 +50,7 @@
     "expect.js": "0.3.1",
     "jsdoc": "3.3.0-beta1",
     "jsdom": "2.0.0",
-    "mocha": "2.1.0"
+    "mocha": "2.1.0",
+    "stylus": "^0.50.0"
   }
 }

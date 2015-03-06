@@ -17,11 +17,11 @@ class RESTController extends Controller {
 	private static $allowed_routes = array();
 
     public function init() {
-    	parent::init();
+        parent::init();
 
         Requirements::css('silverstripe-backbone/css/normalize.css');
         Requirements::css('silverstripe-backbone/css/leaflet.css');
-        Requirements::css('silverstripe-backbone/css/map.css');
+        Requirements::css('silverstripe-backbone/css/main.css');
         Requirements::javascript('silverstripe-backbone/javascript/dist/bundle.js');
     }
 
