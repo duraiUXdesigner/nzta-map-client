@@ -96,10 +96,12 @@ class ConversionService {
 				foreach($geo as $coord) {
 					$coord = str_replace('(', '', $coord); // remove bracket
 					$arr = explode(',', $coord);
+                    $set = array();
 					foreach($arr as $a) {
 						$parts = explode(' ', trim($a));
-						$coordinates[] = $this->getLonLat((float)$parts[0], (float)$parts[1]);
+						$set[] = $this->getLonLat((float)$parts[0], (float)$parts[1]);
 					}
+                    $coordinates[] = $set;
 				}
 
 				break;
