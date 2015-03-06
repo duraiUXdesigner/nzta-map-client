@@ -26,6 +26,10 @@ class RESTController extends Controller {
     }
 
     public function handleAction($request, $action) {
+        if($this->allowedRoute($action)) {
+            return $this;
+        }
+
         // return the template on root.
         if($action == 'index') {
             return parent::handleAction($request, $action);
@@ -62,7 +66,7 @@ class RESTController extends Controller {
             && (($key = array_search($action, $allowedRoutes, true)) !== false) 
         ) {
             return true;
-        } 
+        }
         
         return false;
     }

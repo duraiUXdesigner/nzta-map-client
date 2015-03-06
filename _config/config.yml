@@ -5,7 +5,10 @@ After:
   - 'cms/*'
 ---
 RESTController:
-  allowed_routes:
+  allowed_actions:
     - regions
     - cameras
     - events
+  allowed_routes:
+    - camera
+    - event
