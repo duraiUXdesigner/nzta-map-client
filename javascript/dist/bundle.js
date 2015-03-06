@@ -194,7 +194,7 @@ var MapView = NZTAComponents.MapView.extend({
 
         this.geoJsonLayers = [];
 
-        this.map = Leaflet.map('map').setView([51.505, -0.09], 13);
+        this.map = Leaflet.map('map').setView([-40.866119, 174.143780], 5);
 
         // Set a default icon image path.
         Leaflet.Icon.Default.imagePath = '/silverstripe-backbone/images';
@@ -258,7 +258,7 @@ var MapView = NZTAComponents.MapView.extend({
             // Add each geoJson feature to the new layer.
             _.each(geoJsonCollection.models, function (geoJsonModel) {
                 this.geoJsonLayers[key].addData(geoJsonModel.attributes);
-            }, this)
+            }, this);
         }, this);
     },
 
@@ -284,8 +284,6 @@ var MapView = NZTAComponents.MapView.extend({
      * @desc When navigating to a region, we need to fetch section data for that region, and pan the map to that region.
      */
     _handleFeatureNavigate: function (featureType, urlSegment) {
-        console.log('TODO: Use GeoJsonCollection filter.');
-
         var collection = this.model.get('features'),
             feature = _.filter(collection.models, function (featureModel) {
                 return featureModel.get('properties').id === featureType + '/' + urlSegment;
