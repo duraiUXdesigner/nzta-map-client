@@ -104,7 +104,7 @@ var MapView = NZTAComponents.MapView.extend({
             this.geoJsonLayers[key] = Leaflet.geoJson(null, {
                 onEachFeature: function (feature, layer) {
                     layer.on('click', function () {
-                        NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id);
+                        NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id, {trigger: true});
                     });
                 }
             }).addTo(this.map);

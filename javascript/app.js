@@ -42,7 +42,7 @@
 
     //app.sidebarRegion.show(new SidebarView({ vent: vent }));
 
-    //app.popupRegion.show(new PopupView({ vent: vent }));
+    app.popupRegion.show(new PopupView({ vent: vent }));
 
     //app.userControlsRegion.show(new UserControlsView({ vent: vent }));
 

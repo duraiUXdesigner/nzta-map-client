@@ -15,6 +15,7 @@ var Backbone = require('backbone'),
 var PopupModel = NZTAComponents.PopupModel.extend({
     defaults: {
         hidden: true,
+        feature: null,
         cameras: new NZTAComponents.GeoJsonCollection(),
         events: new NZTAComponents.GeoJsonCollection()
     }

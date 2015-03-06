@@ -19,7 +19,11 @@ var _ = require('underscore'),
 var PopupView = NZTAComponents.PopupView.extend({
 
     template: _.template('\
-        <div id="popup">sup</div> \
+        <div id="popup"> \
+            <% if (feature !== null) { %> \
+                <%= feature.properties.eventComments %> \
+            <% } %> \
+        </div> \
     '),
 
     initialize: function () {
@@ -29,14 +33,20 @@ var PopupView = NZTAComponents.PopupView.extend({
         this.model = new PopupModel();
     },
 
+    templateHelpers: function () {
+        var self = this;
+
+        return {
+            data: function () {
+                return self.model.get('feature')
+            }
+        };
+    },
+
     _isPopupRoute: function (params) {
         var isPopupRoute = true;
 
-        if (params[0] !== 'info') {
-            return false;
-        }
-
-        switch (params[1]) {
+        switch (params[0]) {
             case 'camera':
                 break;
             case 'event':
@@ -49,10 +59,11 @@ var PopupView = NZTAComponents.PopupView.extend({
     },
 
     _handlePopupRoute: function (params) {
-        var collectionName = params[1] + 's';
+        var collectionName = params[0] + 's',
+            collection = this.model.get(collectionName);
 
         // If there's no data available yet, wait until there is before handling the route.
-        if (this.model.get(collectionName).length === 0) {
+        if (collection.length === 0) {
             this.listenToOnce(this.model.get(collectionName), 'add', function () {
                 this._handlePopupRoute(params);
             }, this);
@@ -60,7 +71,7 @@ var PopupView = NZTAComponents.PopupView.extend({
             return;
         }
 
-        this._openPopup(this._getFeatureById(this.model.get(collectionName).models, params[2]));
+        this._openPopup(collection._getFeatureById(params[1]));
     },
 
     _onRoute: function (handler, params) {
@@ -71,7 +82,7 @@ var PopupView = NZTAComponents.PopupView.extend({
 
     _onMapData: function (features) {
         this.model.get('cameras').set(features.cameras.models);
-        this.model.get('events').set(features.roadEvents.models);
+        this.model.get('events').set(features.events.models);
 
         // If a popup is open, re-render it, showing the new data.
         if (this.model.get('hidden') === false && this.model.get('feature').properties !== void 0) {
