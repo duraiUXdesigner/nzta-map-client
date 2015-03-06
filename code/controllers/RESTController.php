@@ -19,6 +19,7 @@ class RESTController extends Controller {
     public function init() {
     	parent::init();
 
+        Requirements::css('silverstripe-backbone/css/normalize.css');
         Requirements::css('silverstripe-backbone/css/leaflet.css');
         Requirements::css('silverstripe-backbone/css/map.css');
         Requirements::javascript('silverstripe-backbone/javascript/dist/bundle.js');
