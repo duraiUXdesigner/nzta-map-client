@@ -34,8 +34,8 @@ class ConversionService {
             // add the feature type to the properties.
             $properties['featureType'] = $feature;
 
-            $type = (isset($child->geometry) ? $this->convertGeometryCoordinates((String)$child->geometry) : 'Point');
-            $coords = (isset($child->geometry) ? (String)$child->geometry : array((Float)$child->longitude, (Float)$child->latitude));
+            $type = (isset($child->geometry) ? $this->getGeometryType((String)$child->geometry) : 'Point');
+            $coords = (isset($child->geometry) ? $this->convertGeometryCoordinates((String)$child->geometry) : array((Float)$child->longitude, (Float)$child->latitude));
 
             // add the geojson feature.
             $geojson['features'][] = array(
