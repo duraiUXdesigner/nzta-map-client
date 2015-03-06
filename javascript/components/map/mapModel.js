@@ -25,7 +25,7 @@ var TrafficMapModel = NZTAComponents.MapModel.extend({
     defaults: {
         cameras: new CamerasCollection(),
         regions: new RegionsCollection(),
-        roadEvents: new RoadEventsCollection()
+        events: new RoadEventsCollection()
     },
 
     initialize: function () {
@@ -45,7 +45,7 @@ var TrafficMapModel = NZTAComponents.MapModel.extend({
         $.when(
             this.get('cameras').fetch(),
             this.get('regions').fetch(),
-            this.get('roadEvents').fetch()
+            this.get('events').fetch()
         ).done(function (camerasXHR, regionsXHR, roadEventsXHR) {
 
             // Add section relations.
@@ -57,7 +57,7 @@ var TrafficMapModel = NZTAComponents.MapModel.extend({
             self.trigger('allDataFetched', { 
                 'cameras': self.get('cameras'),
                 'regions': self.get('regions'),
-                'roadEvents': self.get('roadEvents')
+                'events': self.get('events')
             });
         });
     }

@@ -109,7 +109,7 @@ var TrafficMapModel = NZTAComponents.MapModel.extend({
     defaults: {
         cameras: new CamerasCollection(),
         regions: new RegionsCollection(),
-        roadEvents: new RoadEventsCollection()
+        events: new RoadEventsCollection()
     },
 
     initialize: function () {
@@ -129,7 +129,7 @@ var TrafficMapModel = NZTAComponents.MapModel.extend({
         $.when(
             this.get('cameras').fetch(),
             this.get('regions').fetch(),
-            this.get('roadEvents').fetch()
+            this.get('events').fetch()
         ).done(function (camerasXHR, regionsXHR, roadEventsXHR) {
 
             // Add section relations.
@@ -141,7 +141,7 @@ var TrafficMapModel = NZTAComponents.MapModel.extend({
             self.trigger('allDataFetched', { 
                 'cameras': self.get('cameras'),
                 'regions': self.get('regions'),
-                'roadEvents': self.get('roadEvents')
+                'events': self.get('events')
             });
         });
     }
@@ -290,13 +290,11 @@ var MapView = NZTAComponents.MapView.extend({
      * @desc When navigating to a region, we need to fetch section data for that region, and pan the map to that region.
      */
     _handleFeatureNavigate: function (featureType, urlSegment) {
-        var collection = this.model.get('features'),
-            feature = _.filter(collection.models, function (featureModel) {
-                return featureModel.get('properties').id === featureType + '/' + urlSegment;
-            });
+        var collection = this.model.get(featureType + 's'),
+            feature = collection._getFeatureById(urlSegment);
 
         // If the data hasn't returned yet, set a one time listener to fire when it has.
-        if (feature.length === 0) {
+        if (feature === void 0) {
             this.listenToOnce(collection, 'sync', function () {
                 this._handleFeatureNavigate(featureType, urlSegment);
             }, this);
@@ -304,7 +302,7 @@ var MapView = NZTAComponents.MapView.extend({
             return;
         }
 
-        this._moveToFeature(feature[0], featureType);
+        this._moveToFeature(feature, featureType);
     },
 
     /**
@@ -312,14 +310,19 @@ var MapView = NZTAComponents.MapView.extend({
      * @param {Object} featureModel
      */
     _moveToFeature: function (featureModel, featureType) {
-        var bounds = null;
+        var bounds = null,
+            geometryType = featureModel.get('geometry').type;
 
-        bounds = [
-            featureModel.get('geometry').coordinates[3], // South west
-            featureModel.get('geometry').coordinates[1] // North east
-        ];
+        if(geometryType === 'Point') {
+            this.map.setView([featureModel.get('geometry').coordinates[1], featureModel.get('geometry').coordinates[0]], 11);
+        } else {
+            bounds = [
+                featureModel.get('geometry').coordinates[3], // South west
+                featureModel.get('geometry').coordinates[1] // North east
+            ];
 
-        this._setMapBounds(bounds);
+            this._setMapBounds(bounds);
+        }
     }
 });
 
