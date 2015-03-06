@@ -11,7 +11,7 @@ var NZTAComponents = require('nzta-map-components');
 
 var CamerasCollection = NZTAComponents.GeoJsonCollection.extend({
     model: NZTAComponents.GeoJsonModel,
-    url: 'rest/cameras'
+    url: '/rest/cameras'
 });
 
 module.exports = CamerasCollection;

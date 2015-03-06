@@ -11,7 +11,7 @@ var NZTAComponents = require('nzta-map-components');
 
 var RoadEventsCollection = NZTAComponents.GeoJsonCollection.extend({
     model: NZTAComponents.GeoJsonModel,
-    url: 'rest/events'
+    url: '/rest/events'
 });
 
 module.exports = RoadEventsCollection;

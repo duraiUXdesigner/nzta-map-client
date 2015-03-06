@@ -15,9 +15,9 @@
 
     var globals = require('./shim');
 
-    factory(globals.Backbone, globals._);
+    factory(globals.Backbone, globals._, globals.Cocktail);
 
-}(function (Backbone, _) {
+}(function (Backbone, _, Cocktail) {
 
     'use strict';
 

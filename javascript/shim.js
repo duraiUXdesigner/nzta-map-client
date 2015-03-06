@@ -5,7 +5,8 @@
 /*jshint node: true */
 
 var Backbone = window.Backbone,
-    _ = window._;
+    _ = window._,
+    Cocktail = window.Cocktail;
 
 if (Backbone === void 0) {
     Backbone = window.Backbone = require('backbone');
@@ -13,6 +14,10 @@ if (Backbone === void 0) {
 
 if (_ === void 0) {
     _ = window._ = require('underscore');
+}
+
+if (Cocktail === void 0) {
+    Cocktail = window.Cocktail = require('backbone.cocktail');
 }
 
 if (Backbone.$ === void 0) {
@@ -29,5 +34,6 @@ if (Backbone.Wreqr === void 0) {
 
 module.exports = {
     Backbone: Backbone,
-    _: _
+    _: _,
+    Cocktail: Cocktail
 };

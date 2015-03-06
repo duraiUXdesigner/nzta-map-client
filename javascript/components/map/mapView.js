@@ -8,6 +8,7 @@
  * @requires module:nzta-map-components
  * @requires module:./mapModel
  * @requires module:../../constants
+ * @requires module:../../mixins/eventsMixin
  */
 
 /*jshint node: true, unused: false */
@@ -20,7 +21,8 @@ var Backbone = require('backbone'),
     Leaflet = require('leaflet'),
     NZTAComponents = require('nzta-map-components'),
     MapModel = require('./mapModel'),
-    constants = require('../../constants');
+    constants = require('../../constants'),
+    eventsMixin = require('../../mixins/eventsMixin');
 
 var MapView = NZTAComponents.MapView.extend({
 
@@ -38,7 +40,12 @@ var MapView = NZTAComponents.MapView.extend({
 
         this.model = new MapModel();
 
+        this.geoJsonLayers = [];
+
         this.map = Leaflet.map('map').setView([51.505, -0.09], 13);
+
+        // Set a default icon image path.
+        Leaflet.Icon.Default.imagePath = '/silverstripe-backbone/images';
 
         Leaflet.tileLayer('http://{s}.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}.png', {
             url: "http://{s}.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}.png",
@@ -82,8 +89,27 @@ var MapView = NZTAComponents.MapView.extend({
         }
     },
 
-    _onMapData: function () {
+    _onMapData: function (features) {
         // Draw markers on map.
+        _.each(features, function (geoJsonCollection, key) {
+            // We don't care about regions being drawn on the map...
+            if (geoJsonCollection.excludeFromMap) {
+                return;
+            }
+
+            // Remove the current layer if it exists, so we don't end up with multiple layers displaying the same data.
+            if (this.geoJsonLayers[key] !== void 0) {
+                this.map.removeLayer(this.geoJsonLayers[key]);
+            }
+
+            // Add a layer to display the data on.
+            this.geoJsonLayers[key] = Leaflet.geoJson().addTo(this.map);
+
+            // Add each geoJson feature to the new layer.
+            _.each(geoJsonCollection.models, function (geoJsonModel) {
+                this.geoJsonLayers[key].addData(geoJsonModel.attributes);
+            }, this)
+        }, this);
     },
 
     /**
@@ -142,5 +168,7 @@ var MapView = NZTAComponents.MapView.extend({
         this._setMapBounds(bounds);
     }
 });
+
+Cocktail.mixin(MapView, eventsMixin);
 
 module.exports = MapView;

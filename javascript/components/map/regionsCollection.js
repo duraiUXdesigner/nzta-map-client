@@ -11,7 +11,8 @@ var NZTAComponents = require('nzta-map-components');
 
 var RegionsCollection = NZTAComponents.GeoJsonCollection.extend({
     model: NZTAComponents.GeoJsonModel,
-    url: 'rest/regions'
+    url: '/rest/regions',
+    excludeFromMap: true
 });
 
 module.exports = RegionsCollection;
