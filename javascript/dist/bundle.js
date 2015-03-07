@@ -530,13 +530,13 @@ var UserControlsView = NZTAComponents.UserControlsView.extend({
             </ul> --> \
             <ul class="controls-list primary-controls"> \
                 <li class="control-item"> \
-                    <a id="zoomIn" href="javascript:void(0)">Zoom in</a> \
+                    <a id="zoomIn" class="icon-zoom-in" href="javascript:void(0)">&nbsp;</a> \
                 </li> \
                 <li class="control-item"> \
-                    <a id="zoomOut" href="javascript:void(0)">Zoom out</a> \
+                    <a id="zoomOut" class="icon-zoom-out" href="javascript:void(0)"></a> \
                 </li> \
                 <li class="control-item"> \
-                    <a id="locate" href="javascript:void(0)">My location</a> \
+                    <a id="locate" class="icon-compass" href="javascript:void(0)"></a> \
                 </li> \
             </ul> \
         </div> \
