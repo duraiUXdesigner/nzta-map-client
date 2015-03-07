@@ -420,6 +420,7 @@ var PopupView = NZTAComponents.PopupView.extend({
 
     template: _.template('\
         <div id="popup"> \
+            <a class="icon-cross close" href="javascript:void(0)"></a> \
             <% if (feature !== null) { %> \
                 <%= feature.properties.eventComments %> \
             <% } %> \
@@ -431,16 +432,6 @@ var PopupView = NZTAComponents.PopupView.extend({
         NZTAComponents.PopupView.prototype.initialize.call(this);
 
         this.model = new PopupModel();
-    },
-
-    templateHelpers: function () {
-        var self = this;
-
-        return {
-            data: function () {
-                return self.model.get('feature')
-            }
-        };
     },
 
     _isPopupRoute: function (params) {
@@ -509,7 +500,7 @@ arguments[4][7][0].apply(exports,arguments)
 
 var constants = {};
 
-constants.FETCH_INTERVAL = 10000;
+constants.FETCH_INTERVAL = 10000000;
 
 constants.MAP_DEFAULT_BOUNDS = [[-29.209970, 175.987198],[-52.618591, 165.883804]];
 
