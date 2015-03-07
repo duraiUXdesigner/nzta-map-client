@@ -44,7 +44,7 @@
 
     app.popupRegion.show(new PopupView({ vent: vent }));
 
-    //app.userControlsRegion.show(new UserControlsView({ vent: vent }));
+    app.userControlsRegion.show(new UserControlsView({ vent: vent }));
 
     app.router = NZTAComponents.router;
 

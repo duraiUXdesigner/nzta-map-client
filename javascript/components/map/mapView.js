@@ -61,19 +61,35 @@ var MapView = NZTAComponents.MapView.extend({
 
         // Remove default map controls and use our own
         this.map.removeControl(this.map.zoomControl);
-        
-        // Triggered when a marker is clicked, trigger is set through Mappy class map
-        // this.options.mappy.on('marker.click', function (feature) {
-        //     // Set a previous fragmant on the router so we can navigate back when closing the popup.
-        //     NZTAComponents.router._previousFragment = Backbone.history.fragment;
-
-        //     NZTAComponents.router.navigate('info/' + feature.properties.featureType + '/' + feature.properties.id, { trigger: true });
-        // }, this);
 
         // Listen for when all pre-fetched data calls have returned.
         this.listenTo(this.model, 'allDataFetched', function (features) {
             this.options.vent.trigger('map.update.all', features);
         }, this);
+
+        this.listenTo(this.options.vent, 'userControls.zoomIn', function () {
+            this._zoomIn();
+        }, this);
+
+        this.listenTo(this.options.vent, 'userControls.zoomOut', function () {
+            this._zoomOut();
+        }, this);
+
+        this.listenTo(this.options.vent, 'userControls.locateUser', function () {
+            this._locateUser();
+        }, this);
+    },
+
+    _zoomIn: function () {
+        this.map.zoomIn();
+    },
+
+    _zoomOut: function () {
+        this.map.zoomOut();
+    },
+
+    _locateUser: function () {
+        this.map.locate({ setView: true, maxZoom: this.map.getZoom() });
     },
 
     _onRoute: function (handler, params) {
@@ -104,7 +120,8 @@ var MapView = NZTAComponents.MapView.extend({
             this.geoJsonLayers[key] = Leaflet.geoJson(null, {
                 onEachFeature: function (feature, layer) {
                     layer.on('click', function () {
-                        NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id, {trigger: true});
+                        NZTAComponents.router._previousFragment = Backbone.history.fragment;
+                        NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id, { trigger: true });
                     });
                 }
             }).addTo(this.map);

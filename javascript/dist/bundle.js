@@ -45,7 +45,7 @@
 
     app.popupRegion.show(new PopupView({ vent: vent }));
 
-    //app.userControlsRegion.show(new UserControlsView({ vent: vent }));
+    app.userControlsRegion.show(new UserControlsView({ vent: vent }));
 
     app.router = NZTAComponents.router;
 
@@ -213,19 +213,35 @@ var MapView = NZTAComponents.MapView.extend({
 
         // Remove default map controls and use our own
         this.map.removeControl(this.map.zoomControl);
-        
-        // Triggered when a marker is clicked, trigger is set through Mappy class map
-        // this.options.mappy.on('marker.click', function (feature) {
-        //     // Set a previous fragmant on the router so we can navigate back when closing the popup.
-        //     NZTAComponents.router._previousFragment = Backbone.history.fragment;
-
-        //     NZTAComponents.router.navigate('info/' + feature.properties.featureType + '/' + feature.properties.id, { trigger: true });
-        // }, this);
 
         // Listen for when all pre-fetched data calls have returned.
         this.listenTo(this.model, 'allDataFetched', function (features) {
             this.options.vent.trigger('map.update.all', features);
         }, this);
+
+        this.listenTo(this.options.vent, 'userControls.zoomIn', function () {
+            this._zoomIn();
+        }, this);
+
+        this.listenTo(this.options.vent, 'userControls.zoomOut', function () {
+            this._zoomOut();
+        }, this);
+
+        this.listenTo(this.options.vent, 'userControls.locateUser', function () {
+            this._locateUser();
+        }, this);
+    },
+
+    _zoomIn: function () {
+        this.map.zoomIn();
+    },
+
+    _zoomOut: function () {
+        this.map.zoomOut();
+    },
+
+    _locateUser: function () {
+        this.map.locate({ setView: true, maxZoom: this.map.getZoom() });
     },
 
     _onRoute: function (handler, params) {
@@ -256,7 +272,8 @@ var MapView = NZTAComponents.MapView.extend({
             this.geoJsonLayers[key] = Leaflet.geoJson(null, {
                 onEachFeature: function (feature, layer) {
                     layer.on('click', function () {
-                        NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id, {trigger: true});
+                        NZTAComponents.router._previousFragment = Backbone.history.fragment;
+                        NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id, { trigger: true });
                     });
                 }
             }).addTo(this.map);
@@ -489,8 +506,59 @@ Cocktail.mixin(PopupView, eventsMixin);
 module.exports = PopupView;
 
 },{"../../mixins/eventsMixin":12,"./popupModel":8,"nzta-map-components":27,"underscore":39}],10:[function(require,module,exports){
-arguments[4][7][0].apply(exports,arguments)
-},{"dup":7}],11:[function(require,module,exports){
+/**
+ * @file User controls for the map.
+ * @module UserControlsView
+ * @requires module:underscore
+ * @requires module:nzta-map-components
+ */
+
+/*jshint node: true, multistr: true */
+
+'use strict';
+
+var _ = require('underscore'),
+    NZTAComponents = require('nzta-map-components');
+
+var UserControlsView = NZTAComponents.UserControlsView.extend({
+
+    template: _.template('\
+        <div id="user-controls"> \
+            <!-- <ul class="controls-list secondary-controls"> \
+                <a id="mobile-control-map-button" class="control-item" href="javascript:void(0)">Map</a> \
+                <a id="mobile-control-list-button" class="control-item" href="javascript:void(0)">List</a> \
+            </ul> --> \
+            <ul class="controls-list primary-controls"> \
+                <li class="control-item"> \
+                    <a id="zoomIn" href="javascript:void(0)">Zoom in</a> \
+                </li> \
+                <li class="control-item"> \
+                    <a id="zoomOut" href="javascript:void(0)">Zoom out</a> \
+                </li> \
+                <li class="control-item"> \
+                    <a id="locate" href="javascript:void(0)">My location</a> \
+                </li> \
+            </ul> \
+        </div> \
+    '),
+
+    _zoomIn: function () {
+        this.options.vent.trigger('userControls.zoomIn');
+    },
+
+    _zoomOut: function () {
+        this.options.vent.trigger('userControls.zoomOut');
+    },
+
+    _locateUser: function () {
+        this.options.vent.trigger('userControls.locateUser');
+    }
+
+});
+
+module.exports = UserControlsView;
+
+},{"nzta-map-components":27,"underscore":39}],11:[function(require,module,exports){
 /**
  * @file onstants for the Traffic Map application.
  * @module constants
@@ -30313,7 +30381,7 @@ L.Map.include({
          * @override
          */
         onRender: function () {
-            this.$el.find('#key').replaceWith(this.options.mappy.key.domElement);
+            
         },
 
         /**
@@ -30322,7 +30390,7 @@ L.Map.include({
          * @desc Zooms the Map in.
          */
         _zoomIn: function (e) {
-            this.options.mappy.map.zoomIn(e.shiftKey ? 3 : 1);
+            
         },
 
         /**
@@ -30331,7 +30399,7 @@ L.Map.include({
          * @desc Zooms the Map out.
          */
         _zoomOut: function (e) {
-            this.options.mappy.map.zoomOut(e.shiftKey ? 3 : 1);
+            
         },
 
         /**
@@ -30339,7 +30407,7 @@ L.Map.include({
          * @desc Pan to the user's location on the Map.
          */
         _locateUser: function () {
-            this.options.mappy.map.locate({setView: true, maxZoom: this.options.mappy.map.getZoom()});
+            
         },
 
         /**
