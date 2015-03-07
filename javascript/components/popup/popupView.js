@@ -68,6 +68,8 @@ var PopupView = NZTAComponents.PopupView.extend({
     _onRoute: function (handler, params) {
         if (this._isPopupRoute(params)) {
             this._handlePopupRoute(params);
+        } else {
+            this._closePopup();
         }
     },
 
