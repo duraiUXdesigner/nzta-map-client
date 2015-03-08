@@ -7,7 +7,7 @@
 
 var constants = {};
 
-constants.FETCH_INTERVAL = 10000000;
+constants.FETCH_INTERVAL = 60000;
 
 constants.MAP_DEFAULT_BOUNDS = [[-29.209970, 175.987198],[-52.618591, 165.883804]];
 

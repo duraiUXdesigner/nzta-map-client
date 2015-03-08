@@ -8,6 +8,10 @@ var Backbone = window.Backbone,
     _ = window._,
     Cocktail = window.Cocktail;
 
+var Leaflet = window.L = require('leaflet');
+
+require('leaflet.markercluster');
+
 if (Backbone === void 0) {
     Backbone = window.Backbone = require('backbone');
 }
@@ -39,5 +43,6 @@ if (Backbone.Wreqr === void 0) {
 module.exports = {
     Backbone: Backbone,
     _: _,
-    Cocktail: Cocktail
+    Cocktail: Cocktail,
+    Leaflet: Leaflet
 };

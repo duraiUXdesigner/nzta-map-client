@@ -30,8 +30,6 @@ var MapView = NZTAComponents.MapView.extend({
 
     template: false,
 
-    layerDataPromises: [], // When requests for marker data are recieved before the marker data is fetched.
-
     initialize: function () {
         var self = this;
 
@@ -40,7 +38,7 @@ var MapView = NZTAComponents.MapView.extend({
 
         this.model = new MapModel();
 
-        this.geoJsonLayers = [];
+        this.geoJsonLayers = {};
 
         this.map = Leaflet.map('map').setView([-40.866119, 174.143780], 5);
 
@@ -106,6 +104,8 @@ var MapView = NZTAComponents.MapView.extend({
     _onMapData: function (features) {
         // Draw markers on map.
         _.each(features, function (geoJsonCollection, key) {
+            var geoJson;
+
             // We don't care about regions being drawn on the map...
             if (geoJsonCollection.excludeFromMap) {
                 return;
@@ -116,20 +116,27 @@ var MapView = NZTAComponents.MapView.extend({
                 this.map.removeLayer(this.geoJsonLayers[key]);
             }
 
+            this.geoJsonLayers[key] = Leaflet.markerClusterGroup();
+
             // Add a layer to display the data on.
-            this.geoJsonLayers[key] = Leaflet.geoJson(null, {
+            geoJson = Leaflet.geoJson(null, {
                 onEachFeature: function (feature, layer) {
                     layer.on('click', function () {
                         NZTAComponents.router._previousFragment = Backbone.history.fragment;
                         NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id, { trigger: true });
                     });
                 }
-            }).addTo(this.map);
+            });
 
             // Add each geoJson feature to the new layer.
             _.each(geoJsonCollection.models, function (geoJsonModel) {
-                this.geoJsonLayers[key].addData(geoJsonModel.attributes);
-            }, this);
+                geoJson.addData(geoJsonModel.attributes);
+            });
+
+            this.geoJsonLayers[key].addLayer(geoJson);
+
+            this.map.addLayer(this.geoJsonLayers[key]);
+
         }, this);
     },
 
