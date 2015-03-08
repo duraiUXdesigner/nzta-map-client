@@ -8,7 +8,7 @@ var Backbone = window.Backbone,
     _ = window._,
     Cocktail = window.Cocktail;
 
-var Leaflet = window.L = require('leaflet');
+global.L = window.L = require('leaflet');
 
 require('leaflet.markercluster');
 
@@ -44,5 +44,5 @@ module.exports = {
     Backbone: Backbone,
     _: _,
     Cocktail: Cocktail,
-    Leaflet: Leaflet
+    L: global.L
 };

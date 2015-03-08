@@ -4,9 +4,12 @@
   "description": "Integrate Backbone.js applications with SilverStripe",
   "main": "javascript/dist/bundle.js",
   "scripts": {
-    "build:css": "stylus styl/main.styl --compress --out css/main.css",
-    "build:js": "browserify javascript/app > javascript/dist/bundle.js",
-    "build": "npm run build:css && npm run build:js",
+    "build:css:dev": "stylus styl/main.styl --out css/main.css",
+    "build:css:prod": "stylus styl/main.styl --compress --out css/main.css",
+    "build:js:dev": "browserify javascript/app > javascript/dist/bundle.js",
+    "build:js:prod": "browserify javascript/app | uglifyjs --mangle --output javascript/dist/bundle.js",
+    "build:all:dev": "npm run build:css:dev && npm run build:js:dev",
+    "build:all:prod": "npm run build:css:prod && npm run build:js:prod && npm run test",
     "test": "mocha --require tests/mocha/bootstrap.js --recursive tests/mocha/specs/**/*.spec.js --reporter spec"
   },
   "repository": {
@@ -52,6 +55,7 @@
     "jsdoc": "3.3.0-beta1",
     "jsdom": "2.0.0",
     "mocha": "2.1.0",
-    "stylus": "0.50.0"
+    "stylus": "0.50.0",
+    "uglify-js": "2.4.16"
   }
 }
