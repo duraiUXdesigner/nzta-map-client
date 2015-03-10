@@ -20,7 +20,7 @@ var _ = require('underscore'),
     RoadEventsCollection = require('./roadEventsCollection'),
     constants = require('../../constants');
 
-var TrafficMapModel = NZTAComponents.MapModel.extend({
+var MapModel = NZTAComponents.MapModel.extend({
 
     defaults: {
         cameras: new CamerasCollection(),
@@ -29,13 +29,7 @@ var TrafficMapModel = NZTAComponents.MapModel.extend({
     },
 
     initialize: function () {
-        var self = this;
-
-        this._doFetch();
-
-        setInterval(function () {
-            self._doFetch();
-        }, constants.FETCH_INTERVAL);
+        this._startPolling();
     },
 
     _doFetch: function () {
@@ -47,13 +41,6 @@ var TrafficMapModel = NZTAComponents.MapModel.extend({
             this.get('regions').fetch(),
             this.get('events').fetch()
         ).done(function (camerasXHR, regionsXHR, roadEventsXHR) {
-
-            // Add section relations.
-            // _.each(self.get('sections').models, function (section) {
-            //     section.get('properties').events = self.get('events')._getFeaturesByPropertyValue('section', section.get('properties').id);
-            //     section.get('properties').cameras = self.get('cameras')._getFeaturesByPropertyValue('section', section.get('properties').id);
-            // });
-
             self.trigger('allDataFetched', { 
                 'cameras': self.get('cameras'),
                 'regions': self.get('regions'),
@@ -63,4 +50,4 @@ var TrafficMapModel = NZTAComponents.MapModel.extend({
     }
 });
 
-module.exports = TrafficMapModel;
+module.exports = MapModel;

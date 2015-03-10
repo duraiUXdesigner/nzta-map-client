@@ -9,6 +9,7 @@
     </head>
     <body>
         <div id="map" data-root="rest"></div>
+        <div id="menu-region"></div>
         <div id="popup-region"></div>
         <div id="user-controls-region"></div>
     </body>

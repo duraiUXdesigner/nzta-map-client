@@ -9,15 +9,15 @@
  * @requires module:./components/user-controls/userControlsView
  */
 
-/*jshint node: true, unused: false */
+/*jshint node: true */
 
 (function (factory) {
 
     var globals = require('./shim');
 
-    factory(globals.Backbone);
+    factory(globals.Backbone, globals.L);
 
-}(function (Backbone) {
+}(function (Backbone, L) {
 
     'use strict';
 
@@ -32,7 +32,20 @@
 
     var vent = new Backbone.Wreqr.EventAggregator();
 
-    var map = new MapView({ vent: vent });
+    var map = L.map('map').setView([-40.866119, 174.143780], 5);
+
+    L.Icon.Default.imagePath = '/silverstripe-backbone/images';
+
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 18,
+        zIndex: 10
+    }).addTo(map);
+
+    var mapView = new MapView({
+        vent: vent,
+        map: map
+    });
 
     app.addRegions({
         menuRegion: '#menu-region',
@@ -40,11 +53,17 @@
         userControlsRegion: '#user-controls-region'
     });
 
-    //app.sidebarRegion.show(new SidebarView({ vent: vent }));
+    // app.menuRegion.show(new MenuView({
+    //     vent: vent
+    // }));
 
-    app.popupRegion.show(new PopupView({ vent: vent }));
+    app.popupRegion.show(new PopupView({
+        vent: vent
+    }));
 
-    app.userControlsRegion.show(new UserControlsView({ vent: vent }));
+    app.userControlsRegion.show(new UserControlsView({
+        vent: vent
+    }));
 
     app.router = NZTAComponents.router;
 

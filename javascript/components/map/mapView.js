@@ -40,54 +40,10 @@ var MapView = NZTAComponents.MapView.extend({
 
         this.geoJsonLayers = {};
 
-        this.map = Leaflet.map('map').setView([-40.866119, 174.143780], 5);
-
-        // Set a default icon image path.
-        Leaflet.Icon.Default.imagePath = '/silverstripe-backbone/images';
-
-        Leaflet.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-            maxZoom: 18,
-            zIndex: 10
-        }).addTo(this.map);
-
-        // Override Leaflet CSS
-        this.map._controlCorners.topright.style.marginRight = '0px';
-        this.map._controlCorners.topright.style.marginTop = '0px';
-        this.map._controlCorners.topright.style.fontSize = '16px';
-        this.map._controlCorners.topright.style.fontFamily = "'Source Sans Pro', 'Helvetica Neue', sans-serif";
-
-        // Remove default map controls and use our own
-        this.map.removeControl(this.map.zoomControl);
-
         // Listen for when all pre-fetched data calls have returned.
         this.listenTo(this.model, 'allDataFetched', function (features) {
             this.options.vent.trigger('map.update.all', features);
         }, this);
-
-        this.listenTo(this.options.vent, 'userControls.zoomIn', function () {
-            this._zoomIn();
-        }, this);
-
-        this.listenTo(this.options.vent, 'userControls.zoomOut', function () {
-            this._zoomOut();
-        }, this);
-
-        this.listenTo(this.options.vent, 'userControls.locateUser', function () {
-            this._locateUser();
-        }, this);
-    },
-
-    _zoomIn: function () {
-        this.map.zoomIn();
-    },
-
-    _zoomOut: function () {
-        this.map.zoomOut();
-    },
-
-    _locateUser: function () {
-        this.map.locate({ setView: true, maxZoom: this.map.getZoom() });
     },
 
     _onRoute: function (handler, params) {
@@ -113,7 +69,7 @@ var MapView = NZTAComponents.MapView.extend({
 
             // Remove the current layer if it exists, so we don't end up with multiple layers displaying the same data.
             if (this.geoJsonLayers[key] !== void 0) {
-                this.map.removeLayer(this.geoJsonLayers[key]);
+                this.options.map.removeLayer(this.geoJsonLayers[key]);
             }
 
             this.geoJsonLayers[key] = Leaflet.markerClusterGroup();
@@ -135,16 +91,9 @@ var MapView = NZTAComponents.MapView.extend({
 
             this.geoJsonLayers[key].addLayer(geoJson);
 
-            this.map.addLayer(this.geoJsonLayers[key]);
+            this.options.map.addLayer(this.geoJsonLayers[key]);
 
         }, this);
-    },
-
-    /**
-     * @func _setMapBounds
-     */
-    _setMapBounds: function (bounds) {
-        this.map.fitBounds(bounds);
     },
 
     /**
@@ -174,28 +123,9 @@ var MapView = NZTAComponents.MapView.extend({
             return;
         }
 
-        this._moveToFeature(feature, featureType);
-    },
-
-    /**
-     * @func _moveToFeature
-     * @param {Object} featureModel
-     */
-    _moveToFeature: function (featureModel, featureType) {
-        var bounds = null,
-            geometryType = featureModel.get('geometry').type;
-
-        if(geometryType === 'Point') {
-            this.map.setView([featureModel.get('geometry').coordinates[1], featureModel.get('geometry').coordinates[0]], 11);
-        } else {
-            bounds = [
-                featureModel.get('geometry').coordinates[3], // South west
-                featureModel.get('geometry').coordinates[1] // North east
-            ];
-
-            this._setMapBounds(bounds);
-        }
+        this._moveToFeature(feature);
     }
+
 });
 
 Cocktail.mixin(MapView, eventsMixin);
