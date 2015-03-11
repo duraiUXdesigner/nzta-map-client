@@ -22,13 +22,11 @@ var _ = require('underscore'),
 
 var MapModel = NZTAComponents.MapModel.extend({
 
-    defaults: {
-        cameras: new CamerasCollection(),
-        regions: new RegionsCollection(),
-        events: new RoadEventsCollection()
-    },
-
     initialize: function () {
+        this.cameras = new CamerasCollection();
+        this.regions = new RegionsCollection();
+        this.events = new RoadEventsCollection();
+
         this._startPolling(constants.FETCH_INTERVAL);
     },
 
@@ -37,14 +35,14 @@ var MapModel = NZTAComponents.MapModel.extend({
 
         // When all requests are complete, inform the view.
         $.when(
-            this.get('cameras').fetch(),
-            this.get('regions').fetch(),
-            this.get('events').fetch()
+            this.cameras.fetch(),
+            this.regions.fetch(),
+            this.events.fetch()
         ).done(function (camerasXHR, regionsXHR, roadEventsXHR) {
             self.trigger('allDataFetched', { 
-                'cameras': self.get('cameras'),
-                'regions': self.get('regions'),
-                'events': self.get('events')
+                'cameras': self.cameras,
+                'regions': self.regions,
+                'events': self.events
             });
         });
     }
