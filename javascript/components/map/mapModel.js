@@ -29,7 +29,7 @@ var MapModel = NZTAComponents.MapModel.extend({
     },
 
     initialize: function () {
-        this._startPolling();
+        this._startPolling(constants.FETCH_INTERVAL);
     },
 
     _doFetch: function () {

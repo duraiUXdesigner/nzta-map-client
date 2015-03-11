@@ -30,20 +30,30 @@ var UserControlsView = NZTAComponents.UserControlsView.extend({
                 <li class="control-item"> \
                     <a id="locate" class="icon-compass" href="javascript:void(0)"></a> \
                 </li> \
+                <li class="control-item"> \
+                    <a id="mapLayerFilters" class="icon-stack" href="javascript:void(0)"></a> \
+                </li>\
+                <ul id="mapLayerFiltersList" class="<% if (!mapLayerFiltersOpen) { %>hidden<% } %>"> \
+                    <li> \
+                        <a class="map-layer-filter" href="javascript:void(0)" data-layer="cameras">Cameras</a> \
+                    </li> \
+                    <li> \
+                        <a class="map-layer-filter" href="javascript:void(0)" data-layer="events">Road events</a> \
+                    </li> \
+                </ul> \
             </ul> \
         </div> \
     '),
+    
+    /**
+     * @function _toggleMapLayerFilters
+     * @override
+     */
+    _toggleMapLayerFilters: function () {
+        // Toggle the mapLayerFiltersOpen value.
+        this.model.set('mapLayerFiltersOpen', this.model.get('mapLayerFiltersOpen') === false);
 
-    _zoomIn: function () {
-        this.options.vent.trigger('userControls.zoomIn');
-    },
-
-    _zoomOut: function () {
-        this.options.vent.trigger('userControls.zoomOut');
-    },
-
-    _locateUser: function () {
-        this.options.vent.trigger('userControls.locateUser');
+        this.render();
     }
 
 });

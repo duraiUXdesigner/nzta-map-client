@@ -4,7 +4,6 @@
  * @requires module:backbone
  * @requires module:underscore
  * @requires module:jquery
- * @requires module:leaflet
  * @requires module:nzta-map-components
  * @requires module:./mapModel
  * @requires module:../../constants
@@ -18,7 +17,6 @@
 var Backbone = require('backbone'),
     _ = require('underscore'),
     $ = require('jquery'),
-    Leaflet = require('leaflet'),
     NZTAComponents = require('nzta-map-components'),
     MapModel = require('./mapModel'),
     constants = require('../../constants'),
@@ -38,8 +36,6 @@ var MapView = NZTAComponents.MapView.extend({
 
         this.model = new MapModel();
 
-        this.geoJsonLayers = {};
-
         // Listen for when all pre-fetched data calls have returned.
         this.listenTo(this.model, 'allDataFetched', function (features) {
             this.options.vent.trigger('map.update.all', features);
@@ -58,41 +54,14 @@ var MapView = NZTAComponents.MapView.extend({
     },
 
     _onMapData: function (features) {
-        // Draw markers on map.
+        // Add a map layer for each feature set.
         _.each(features, function (geoJsonCollection, key) {
-            var geoJson;
+            var layer = _.findWhere(this.geoJsonLayers, { id: key });
 
-            // We don't care about regions being drawn on the map...
-            if (geoJsonCollection.excludeFromMap) {
-                return;
+            // If the layer has been turned off by the user, don't add it.
+            if (layer === void 0 || (layer !== void 0 && layer.markerClusterGroup !== null)) {
+                this._addMapLayer(key);
             }
-
-            // Remove the current layer if it exists, so we don't end up with multiple layers displaying the same data.
-            if (this.geoJsonLayers[key] !== void 0) {
-                this.options.map.removeLayer(this.geoJsonLayers[key]);
-            }
-
-            this.geoJsonLayers[key] = Leaflet.markerClusterGroup();
-
-            // Add a layer to display the data on.
-            geoJson = Leaflet.geoJson(null, {
-                onEachFeature: function (feature, layer) {
-                    layer.on('click', function () {
-                        NZTAComponents.router._previousFragment = Backbone.history.fragment;
-                        NZTAComponents.router.navigate(feature.properties.featureType + '/' + feature.properties.id, { trigger: true });
-                    });
-                }
-            });
-
-            // Add each geoJson feature to the new layer.
-            _.each(geoJsonCollection.models, function (geoJsonModel) {
-                geoJson.addData(geoJsonModel.attributes);
-            });
-
-            this.geoJsonLayers[key].addLayer(geoJson);
-
-            this.options.map.addLayer(this.geoJsonLayers[key]);
-
         }, this);
     },
 
