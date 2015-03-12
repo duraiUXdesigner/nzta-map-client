@@ -53,18 +53,6 @@ var MapView = NZTAComponents.MapView.extend({
         }
     },
 
-    _onMapData: function (features) {
-        // Add a map layer for each feature set.
-        _.each(features, function (geoJsonCollection, key) {
-            var layer = _.findWhere(this.geoJsonLayers, { id: key });
-
-            // If the layer has been turned off by the user, don't add it.
-            if (layer === void 0 || (layer !== void 0 && layer.markerClusterGroup !== null)) {
-                this._addMapLayer(key);
-            }
-        }, this);
-    },
-
     /**
      * @func _handleRootNavigate
      * @desc When navigating to a the map root.
