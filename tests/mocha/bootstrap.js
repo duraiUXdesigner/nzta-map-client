@@ -4,5 +4,3 @@ global.expect = require("expect.js");
 global.window = new Window();
 global.document = window.document;
 global.navigator = window.navigator;
-
-require('../../javascript/shim');

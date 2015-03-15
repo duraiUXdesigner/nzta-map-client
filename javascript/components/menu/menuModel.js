@@ -14,9 +14,9 @@ var Backbone = require('backbone'),
 
 var MenuModel = Backbone.Model.extend({
 
-    defaults: {
-        regions: new NZTAComponents.GeoJsonCollection(),
-        events: new NZTAComponents.GeoJsonCollection()
+    initialize: function () {
+        this.regions = new NZTAComponents.GeoJsonCollection();
+        this.events = new NZTAComponents.GeoJsonCollection();
     }
 
 });

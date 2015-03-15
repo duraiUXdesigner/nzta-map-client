@@ -1,7 +1,6 @@
 /**
  * @file Data model for TrafficMapPopupView.
  * @module PopupModel
- * @requires module:backbone
  * @requires module:nzta-map-components
  */
 
@@ -9,16 +8,18 @@
 
 'use strict';
 
-var Backbone = require('backbone'),
-    NZTAComponents = require('nzta-map-components');
+var NZTAComponents = require('nzta-map-components');
 
 var PopupModel = NZTAComponents.PopupModel.extend({
-    defaults: {
-        hidden: true,
-        feature: null,
-        cameras: new NZTAComponents.GeoJsonCollection(),
-        events: new NZTAComponents.GeoJsonCollection()
+
+    initialize: function () {
+        // Call super
+        NZTAComponents.PopupModel.prototype.initialize.call(this);
+
+        this.cameras = new NZTAComponents.GeoJsonCollection();
+        this.events = new NZTAComponents.GeoJsonCollection();
     }
+
 });
 
 module.exports = PopupModel;

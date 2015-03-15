@@ -1,7 +1,7 @@
 {
-  "name": "silverstripe-backbone",
+  "name": "nzta-map-client",
   "version": "0.0.1",
-  "description": "Integrate Backbone.js applications with SilverStripe",
+  "description": "Client application for NZTA maps.",
   "main": "javascript/dist/bundle.js",
   "scripts": {
     "build:css:dev": "stylus styl/main.styl --out css/main.css",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/flashbackzoo/silverstripe-backbone.git"
+    "url": "git://github.com/flashbackzoo/nzta-map-client.git"
   },
   "keywords": [
     "Backbone",
-    "SilverStripe",
     "GeoJSON",
     "Map",
-    "Leaflet"
+    "Leaflet",
+    "NZTA"
   ],
   "contributors": [
     {
@@ -34,19 +34,15 @@
     }
   ],
   "bugs": {
-    "url": "https://github.com/flashbackzoo/silverstripe-backbone/issues"
+    "url": "https://github.com/flashbackzoo/nzta-map-client/issues"
   },
-  "homepage": "https://github.com/flashbackzoo/silverstripe-backbone",
+  "homepage": "https://github.com/flashbackzoo/nzta-map-client",
   "dependencies": {
     "backbone": "1.1.2",
-    "backbone-associations": "0.6.2",
-    "backbone.cocktail": "0.5.10",
     "backbone.marionette": "2.4.1",
     "backbone.wreqr": "1.3.1",
     "browserify": "8.1.3",
     "jquery": "2.1.3",
-    "leaflet": "0.7.3",
-    "leaflet.markercluster": "0.4.0",
     "nzta-map-components": "silverstripe-iterators/nzta-map-components",
     "underscore": "1.8.2"
   },

@@ -11,71 +11,46 @@
 
 /*jshint node: true */
 
-(function (factory) {
+'use strict';
 
-    var globals = require('./shim');
+var NZTAComponents = require('nzta-map-components'),
+    Backbone = require('backbone'),
+    constants = require('./constants'),
+    MapView = require('./components/map/mapView'),
+    MenuView = require('./components/menu/menuView'),
+    PopupView = require('./components/popup/popupView'),
+    UserControlsView = require('./components/user-controls/userControlsView');
 
-    factory(globals.Backbone, globals.L);
+Backbone.$ = require('jquery');
+Backbone.Marionette = require('backbone.marionette');
+Backbone.Wreqr = require('backbone.wreqr');
 
-}(function (Backbone, L) {
+var app = new NZTAComponents.Application({
+    rootPath: constants.ROOT_PATH
+});
 
-    'use strict';
+var vent = new Backbone.Wreqr.EventAggregator();
 
-    var NZTAComponents = require('nzta-map-components'),
-        constants = require('./constants'),
-        MapView = require('./components/map/mapView'),
-        MenuView = require('./components/menu/menuView'),
-        PopupView = require('./components/popup/popupView'),
-        UserControlsView = require('./components/user-controls/userControlsView');
+var mapView = new MapView({
+    vent: vent
+});
 
-    var app = new Backbone.Marionette.Application();
+app.addRegions({
+    menuRegion: '#menu-region',
+    popupRegion: '#popup-region',
+    userControlsRegion: '#user-controls-region'
+});
 
-    var vent = new Backbone.Wreqr.EventAggregator();
-
-    var map = L.map('map').setView([-40.866119, 174.143780], 5);
-
-    L.Icon.Default.imagePath = '/silverstripe-backbone/images';
-
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 18,
-        zIndex: 10
-    }).addTo(map);
-
-    var mapView = new MapView({
-        vent: vent,
-        map: map
-    });
-
-    app.addRegions({
-        menuRegion: '#menu-region',
-        popupRegion: '#popup-region',
-        userControlsRegion: '#user-controls-region'
-    });
-
-    // app.menuRegion.show(new MenuView({
-    //     vent: vent
-    // }));
-
-    app.popupRegion.show(new PopupView({
-        vent: vent
-    }));
-
-    app.userControlsRegion.show(new UserControlsView({
-        vent: vent
-    }));
-
-    app.router = NZTAComponents.router;
-
-    app.on('start', function () {
-        if (Backbone.history) {
-            Backbone.history.start({ 
-                pushState: true,
-                root: constants.ROOT_PATH
-            });
-        }
-    });
-
-    app.start();
-
+app.menuRegion.show(new MenuView({
+    vent: vent
 }));
+
+app.popupRegion.show(new PopupView({
+    vent: vent
+}));
+
+app.userControlsRegion.show(new UserControlsView({
+    vent: vent
+}));
+
+app.start();

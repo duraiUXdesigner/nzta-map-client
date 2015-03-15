@@ -1,25 +1,14 @@
-@require('../../../styl/responsive')
-@require('../../../styl/mixins')
+@require('../components')
 
 #popup-region
-    background rgb(242,242,242)
-    border solid 1px rgb(205,205,205)
-    bottom 10%
+    @extends .sidebar-component
     display none
-    left 2%
-    padding 3em 1.5em
-    position absolute
-    right 20%
-    top 10%
+    padding-top 5em
 
-    @media $medium-display
-        left: 2%;
-        right 70%
-    
     .modal-active &
         display block
 
     .close
         position absolute
-        top 4%
+        top 2em
         right 5%

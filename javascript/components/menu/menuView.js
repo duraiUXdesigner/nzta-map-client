@@ -5,7 +5,6 @@
  * @requires module:nzta-map-components
  * @requires module:./menuModel
  * @requires module:./regionPanelView
- * @requires module:../../mixins/eventsMixin
  */
 
 /*jshint node: true */
@@ -15,8 +14,7 @@
 var _ = require('underscore'),
     NZTAComponents = require('nzta-map-components'),
     MenuModel = require('./menuModel'),
-    RegionPanelView = require('./regionPanelView'),
-    eventsMixin = require('../../mixins/eventsMixin');
+    RegionPanelView = require('./regionPanelView');
 
 var MenuView = NZTAComponents.DrillDownMenuView.extend({
 
@@ -27,10 +25,12 @@ var MenuView = NZTAComponents.DrillDownMenuView.extend({
     },
 
     initialize: function (options) {
-        this.model = new MenuModel();
-
-        // Call super last because it adds default attributes to the model.
-        NZTAComponents.DrillDownMenuView.prototype.initialize.call(this, options);
+        // Call super
+        NZTAComponents.DrillDownMenuView.prototype.initialize.call(this, {
+            model: new MenuModel(),
+            defaultPanel: RegionPanelView,
+            defaultCollectionKey: 'regions'
+        });
     },
 
     _isMenuRoute: function (params) {
@@ -44,8 +44,8 @@ var MenuView = NZTAComponents.DrillDownMenuView.extend({
             regionPanel;
 
         // Wait until the required data is available before creating a panel.
-        if (this.model.get('events').models.length === 0) {
-            this.listenToOnce(this.model.get('events'), 'sync', function () {
+        if (this.model.events.models.length === 0) {
+            this.listenToOnce(this.model.events, 'sync', function () {
                 this._handleMenuRoute(handler, params);
             }, this);
 
@@ -57,7 +57,7 @@ var MenuView = NZTAComponents.DrillDownMenuView.extend({
             value: params[0] + '/' + params[1]
         };
 
-        regionTitle = this.model.get('regions').models.filter(function (regionModel) {
+        regionTitle = this.model.regions.models.filter(function (regionModel) {
             return regionModel.get('properties').id === params[0] + '/' + params[1];
         });
 
@@ -80,12 +80,10 @@ var MenuView = NZTAComponents.DrillDownMenuView.extend({
     },
 
     _onMapData: function (features) {
-        this.model.get('regions').set(features.regions.models);
-        this.model.get('events').set(features.events.models);
+        this.model.regions.set(features.regions.models);
+        this.model.events.set(features.events.models);
     }
 
 });
-
-Cocktail.mixin(MenuView, eventsMixin);
 
 module.exports = MenuView;

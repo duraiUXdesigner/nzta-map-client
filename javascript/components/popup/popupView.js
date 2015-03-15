@@ -4,7 +4,6 @@
  * @requires module:underscore
  * @requires module:nzta-map-components
  * @requires module:./popupModel
- * @requires module:../../mixins/eventsMixin
  */
 
 /*jshint multistr: true, node: true */
@@ -13,34 +12,31 @@
 
 var _ = require('underscore'),
     NZTAComponents = require('nzta-map-components'),
-    PopupModel = require('./popupModel'),
-    eventsMixin = require('../../mixins/eventsMixin');
+    PopupModel = require('./popupModel');
 
 var PopupView = NZTAComponents.PopupView.extend({
 
     template: _.template('\
         <div id="popup"> \
             <a class="icon-cross close" href="javascript:void(0)"></a> \
-            <% if (feature !== null) { %> \
-                <%= feature.properties.eventComments %> \
-            <% } %> \
+            <%= feature.eventComments %> \
         </div> \
     '),
 
     initialize: function () {
         // Call super
-        NZTAComponents.PopupView.prototype.initialize.call(this);
-
-        this.model = new PopupModel();
+        NZTAComponents.PopupView.prototype.initialize.call(this, {
+            model: new PopupModel()
+        });
     },
 
     _isPopupRoute: function (params) {
         var isPopupRoute = true;
 
         switch (params[0]) {
-            case 'camera':
+            case 'cameras':
                 break;
-            case 'event':
+            case 'events':
                 break;
             default:
                 isPopupRoute = false;
@@ -50,12 +46,12 @@ var PopupView = NZTAComponents.PopupView.extend({
     },
 
     _handlePopupRoute: function (params) {
-        var collectionName = params[0] + 's',
-            collection = this.model.get(collectionName);
+        var collectionName = params[0],
+            collection = this.model[collectionName];
 
         // If there's no data available yet, wait until there is before handling the route.
         if (collection.length === 0) {
-            this.listenToOnce(this.model.get(collectionName), 'add', function () {
+            this.listenToOnce(this.model[collectionName], 'add', function () {
                 this._handlePopupRoute(params);
             }, this);
 
@@ -74,18 +70,21 @@ var PopupView = NZTAComponents.PopupView.extend({
     },
 
     _onMapData: function (features) {
-        this.model.get('cameras').set(features.cameras.models);
-        this.model.get('events').set(features.events.models);
+        var collection,
+            featureId;
+
+        this.model.cameras.set(features.cameras.models);
+        this.model.events.set(features.events.models);
 
         // If a popup is open, re-render it, showing the new data.
-        if (this.model.get('hidden') === false && this.model.get('feature').properties !== void 0) {
-            this._openPopup(this._getFeatureById(this.model.get(this.model.get('type') + 's').models, this.model.get('feature').properties.id));
-        }
+        if (this.model.get('hidden') === false) {
+            collection = this.model[this.model.feature.get('properties').featureType + 's'];
+            featureId = this.model.feature.get('properties').id;
 
-        this.render();
+            this._openPopup(collection._getFeatureById(featureId));
+            this.render();
+        }
     }
 });
-
-Cocktail.mixin(PopupView, eventsMixin);
 
 module.exports = PopupView;

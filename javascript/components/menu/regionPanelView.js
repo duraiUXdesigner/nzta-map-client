@@ -4,7 +4,6 @@
  * @requires module:underscore
  * @requires module:nzta-map-components
  * @requires module:./regionPanelItemView
- * @requires module:../../mixins/eventsMixin
  */
 
 /*jshint node: true, multistr: true */
@@ -13,8 +12,7 @@
 
 var _ = require('underscore'),
     NZTAComponents = require('nzta-map-components'),
-    RegionPanelItemView = require('./regionPanelItemView'),
-    eventsMixin = require('../../mixins/eventsMixin');
+    RegionPanelItemView = require('./regionPanelItemView');
 
 var RegionPanelView = NZTAComponents.DrillDownPanelView.extend({
 
@@ -22,31 +20,15 @@ var RegionPanelView = NZTAComponents.DrillDownPanelView.extend({
 
     template: _.template('\
         <div class="menu-panel"> \
-            Sup \
+            <h2>Regions:</h2> \
             <ul class="items"></ul> \
         </div> \
     '),
 
     _onMapData: function (features) {
-        // Get journeys for the current region and update the collection.
-        var journeys = this._getRelationsForFeature(features.journeys.models, 'regions', this.model.get('id'));
-
-        this.collection.set(journeys);
-
-        // Set the open/closed display of child view event summary dropdowns.
-        _.each(this.children._views, function (childView) {
-            var stateObj = _.findWhere(this.eventSummaryStates, { journeyId: childView.model.get('properties').id });
-
-            // Does the child view have an event summary dropdown that should be open?
-            if (stateObj !== void 0 && stateObj.expandedSummary !== null) {
-                childView._openRoadEventSummary(childView.$el.find('.pill--summary[data-type="' + stateObj.expandedSummary + '"]'));
-            }
-        }, this);
-
+        this.collection.set(features.regions.models);
     }
 
 });
-
-Cocktail.mixin(RegionPanelView, eventsMixin);
 
 module.exports = RegionPanelView;

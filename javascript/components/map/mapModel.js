@@ -23,9 +23,19 @@ var _ = require('underscore'),
 var MapModel = NZTAComponents.MapModel.extend({
 
     initialize: function () {
-        this.cameras = new CamerasCollection();
+        this.cameras = new CamerasCollection({
+            iconUrl: '/javascript/components/map/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [25, 41]
+        });
+
+        this.events = new RoadEventsCollection({
+            iconUrl: '/javascript/components/map/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [25, 41]
+        });
+
         this.regions = new RegionsCollection();
-        this.events = new RoadEventsCollection();
 
         this._startPolling(constants.FETCH_INTERVAL);
     },
@@ -39,7 +49,7 @@ var MapModel = NZTAComponents.MapModel.extend({
             this.regions.fetch(),
             this.events.fetch()
         ).done(function (camerasXHR, regionsXHR, roadEventsXHR) {
-            self.trigger('allDataFetched', { 
+            self.trigger('data.all', { 
                 'cameras': self.cameras,
                 'regions': self.regions,
                 'events': self.events
