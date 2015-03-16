@@ -1,6 +1,6 @@
 {
   "name": "nzta-map-client",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Client application for NZTA maps.",
   "main": "javascript/dist/bundle.js",
   "scripts": {
