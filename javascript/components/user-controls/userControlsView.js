@@ -3,6 +3,7 @@
  * @module UserControlsView
  * @requires module:underscore
  * @requires module:nzta-map-components
+ * @requires module:jquery
  */
 
 /*jshint node: true, multistr: true */
@@ -10,6 +11,7 @@
 'use strict';
 
 var _ = require('underscore'),
+    $ = require('jquery'),
     NZTAComponents = require('nzta-map-components');
 
 var UserControlsView = NZTAComponents.UserControlsView.extend({
@@ -35,15 +37,35 @@ var UserControlsView = NZTAComponents.UserControlsView.extend({
                 </li>\
                 <ul id="mapLayerFiltersList" class="<% if (!mapLayerFiltersOpen) { %>hidden<% } %>"> \
                     <li> \
-                        <a class="map-layer-filter" href="javascript:void(0)" data-layer="cameras">Cameras</a> \
+                        <a class="map-layer-filter icon-checkbox-checked" href="javascript:void(0)" data-layer="cameras">Cameras</a> \
                     </li> \
                     <li> \
-                        <a class="map-layer-filter" href="javascript:void(0)" data-layer="events">Road events</a> \
+                        <a class="map-layer-filter icon-checkbox-checked" href="javascript:void(0)" data-layer="events"></span>Road events</a> \
                     </li> \
                 </ul> \
             </ul> \
         </div> \
     '),
+
+    initialize: function () {
+        NZTAComponents.UserControlsView.prototype.initialize.call(this);
+
+        // When a layer filter is clicked, we want to update a CSS class.
+        this.listenTo(this.options.vent, 'userControls.toggleMapLayer', function (layer) {
+            var $filter = this.$el.find('.map-layer-filter[data-layer="' + layer + '"]'),
+                filterIsChecked = $filter.hasClass('icon-checkbox-checked');
+
+            $filter.removeClass (function (index, css) {
+                return (css.match (/(^|\s)icon-checkbox-\S+/g) || []).join(' ');
+            });
+
+            if (filterIsChecked) {
+                $filter.addClass('icon-checkbox-unchecked');
+            } else {
+                $filter.addClass('icon-checkbox-checked');
+            }
+        }, this);
+    },
     
     /**
      * @function _toggleMapLayerFilters
