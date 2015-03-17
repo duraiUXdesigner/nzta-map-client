@@ -14,7 +14,7 @@ Include the module as a dependency:
 `npm install nzta-map-client --save`
 
 ## Setup
-By default, the application uses static JSON files in the `data` directory as endpoints. You'll want to changes those. Open the collection files in `javascript/components/map` and update the URL's to your endpoints.
+By default, the application uses static JSON files in the `data` directory as endpoints. You'll want to changes those. Open `javascript\constants.js` and update `constants.DATA_ENDPOINTS` to your endpoints. These constants are used by the collections in `javascript/components/map`.
 
 Rebuild the bundle file by running `npm run build:all:prod`.
 
