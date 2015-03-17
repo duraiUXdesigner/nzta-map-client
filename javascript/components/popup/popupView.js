@@ -4,6 +4,7 @@
  * @requires module:underscore
  * @requires module:nzta-map-components
  * @requires module:./popupModel
+ * @requires module:./templates/cameras
  */
 
 /*jshint multistr: true, node: true */
@@ -12,16 +13,29 @@
 
 var _ = require('underscore'),
     NZTAComponents = require('nzta-map-components'),
-    PopupModel = require('./popupModel');
+    PopupModel = require('./popupModel'),
+    cameraTemplate = require('./templates/cameras'),
+    roadEventsTemplate = require('./templates/roadEvents');
 
 var PopupView = NZTAComponents.PopupView.extend({
 
-    template: _.template('\
-        <div id="popup"> \
-            <a class="icon-cross close" href="javascript:void(0)"></a> \
-            <%= feature.eventComments %> \
-        </div> \
-    '),
+    template: function (model) {
+        var tmpl;
+
+        // Conditional template switching...
+        switch (model.featureType) {
+            case 'camera':
+                tmpl = _.template(cameraTemplate)(model);
+                break;
+            case 'event':
+                tmpl = _.template(roadEventsTemplate)(model);
+                break;
+            default:
+                tmpl = '';
+        }
+
+        return tmpl;
+    },
 
     initialize: function () {
         // Call super
